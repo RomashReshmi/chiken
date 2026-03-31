@@ -1,0 +1,7 @@
+{
+  "name": "Poultry Farm API",
+  "version": "1.0.0",
+  "description": "REST API documentation for Poultry Farm Management System",
+  "title": "Poultry API Docs",
+  "url": "http://localhost:3000"
+}
