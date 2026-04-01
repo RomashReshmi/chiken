@@ -1,40 +1,40 @@
 # Poultry Farm Management System
 
-This is a comprehensive REST API and Client application prototype built to monitor and manage a poultry farm. It was developed to follow agile methodologies and RESTful API practices.
+This is a comprehensive REST API and Client application prototype built to monitor and manage a poultry farm. It focuses on a highly premium, resilient user experience, and RESTful methodologies.
 
 ## Technologies Used
-- Backend: Node.js, Express.js
-- Database: SQLite3
-- Tooling/Middleware: Express-Validator, apidoc, Jest, Supertest
-- Frontend: React 18, Vite, CSS Glassmorphism styling, Testcafe
+- **Backend:** Node.js, Express.js
+- **Database:** SQLite3
+- **Tooling/Middleware:** Express-Validator, apidoc, Jest, Supertest
+- **Frontend:** React 18, Vite, Lucide-React (Icons)
+- **Styling:** Custom CSS Variables System, Glassmorphism UI, Responsive CSS Grid/Flexbox
+- **Testing:** TestCafe (E2E), Jest
 
 ## Project Structure
 ```text
 poultry-farm-system/
 │
-├── api/
+├── API/
 │   ├── app.js                       # API Entry point
 │   ├── package.json                 # Dependencies and NPM Scripts
 │   ├── apidoc.json                  # Apidoc config
-│   ├── controllers/                 # Controllers mapping routes to models (e.g. chickenController.js)
 │   ├── database/                    # Contains sqlite3 database module and initialization script
-│   │   ├── database.js
-│   │   └── init.js                  # Run this to seed 20 realistic models
-│   ├── middleware/                  # Express validation checks (validator.js)
-│   ├── models/                      # SQLite3 interactions (chickenModel.js)
-│   ├── routes/                      # API endpoint definitions (chickenRoutes.js)
-│   └── tests/                       # Jest testing suite for logic testing
+│   └── ...                          # Controllers, Middleware, Routes, Tests
 │
-├── client/
-│   ├── index.html                   # HTML Entry template
-│   ├── package.json                 # React Vite Dependencies
+├── CLIENT/
+│   ├── index.html                   # HTML Entry loaded with Google Fonts
 │   ├── src/                         
-│   │   ├── App.jsx                  # Main UI - Dashboard, Tables, Forms
-│   │   ├── main.jsx                 # React root renderer
-│   │   └── index.css                # Glassmorphism dynamic UI variables
+│   │   ├── App.jsx                  # Main UI container holding Dashboard routing
+│   │   ├── index.css                # Core design system & CSS variables (Dark Emerald Theme)
+│   │   ├── components.css           # Modular layouts and grid responsives
+│   │   └── components/              
+│   │       ├── Sidebar.jsx          # Interactive side navigation
+│   │       ├── Dashboard.jsx        # Stat-driven responsive dashboard cards
+│   │       ├── ChickensList.jsx     # Dynamic animated data tables
+│   │       └── AddChickenForm.jsx   # Input validation flows
 │   └── tests/                       # TestCafe integration suite
 │
-├── README.md                        # Documentation requirements
+└── README.md                        # Documentation requirements
 ```
 
 ## Running the Project
@@ -42,31 +42,26 @@ poultry-farm-system/
 ### 1. Setup Backend API
 1. Navigate to the api directory:
    ```bash
-   cd api
+   cd API
    ```
 2. Install tools:
    ```bash
    npm install
    ```
-3. Initialize the database and seed the mock data (at least 20 items):
+3. Initialize the database and seed the mock data:
    ```bash
    npm run db:init
    ```
-4. Build documentation:
-   ```bash
-   npm run docs
-   ```
-5. Start backend development server:
+4. Start backend development server:
    ```bash
    npm run dev
    ```
    > The API will be available at `http://localhost:3000`
-   > API docs reachable at `http://localhost:3000/apidoc`
 
 ### 2. Setup Client Side
 1. Open a new terminal and navigate to the client directory:
    ```bash
-   cd client
+   cd CLIENT
    ```
 2. Install frontend frameworks:
    ```bash
@@ -76,21 +71,10 @@ poultry-farm-system/
    ```bash
    npm run dev
    ```
-   > The React app will stream to `http://localhost:5173`. Make sure the Node API backend server is active first!
+   > The React app runs at `http://localhost:5173`.
 
-### 3. Testing
-**API Testing (Jest/Supertest)**
-In the `api/` directory:
-```bash
-npm run test
-```
-**Frontend Client Navigation Tests (TestCafe)**
-In the `client/` directory, while server is running:
-```bash
-npm run test
-```
-
-## Features Delivered
-- **Full CRUD API Validation** 
-- **Extensible SQLite Base Pattern**. Modular controllers/validation map correctly over any entity (Feed/Eggs/Staff) following the Chicken architecture format.
-- **Glassmorphism App Theme**, ensuring UI rich fidelity and color harmonization. Default error states included to address missing backend checks gracefully.
+## UI Overhaul Highlights
+- **Premium Design System:** Fully replaced default styles with a bespoke "Tech SaaS" and "Emerald Farm" hybrid theme. High focus on exact typography (`Outfit` and `Inter`) with clean color scales.
+- **Micro-Interactions:** Hover cards with glowing boundaries, animated slide-up mounting effects, and staggered child components mimicking high-end application behavior.
+- **Component Componentization:** The application was refactored from a single monolithic display into highly focused standalone React layout elements mapping directly to modern architecture patterns.
+- **Responsive Fluidity:** Navigations gracefully adjust to sticky bottom-rows and data tables adopt scrollable overflow behavior to ensure mobile and tablet users have parity with desktop features.
