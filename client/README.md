@@ -1,16 +1,33 @@
-# React + Vite
+# Poultry Farm Prototype - Client Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the front-end client application for the Poultry Farm Management System, built using React and Vite. It demonstrates a high-fidelity interaction with the Poultry REST API endpoints.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Before starting the client application, ensure that your underlying API is running at `http://localhost:3000`. You will need Node.js and NPM/Yarn installed on your system.
 
-## React Compiler
+## Starting the Client Application
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. Open a new terminal window or tab.
+2. Navigate into the `CLIENT` directory.
+3. Install the required client dependencies:
+   ```bash
+   npm install
+   ```
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+5. Click the local development server link (usually `http://localhost:5173`) to view the application in your browser.
 
-## Expanding the ESLint configuration
+## Running Functional Tests
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+This project uses **TestCafe** for functional testing.
+
+1. Ensure both your API and Client development servers are running.
+2. Open a new terminal window in the `CLIENT` directory.
+3. Run the test suite:
+   ```bash
+   npm test
+   ```
+This will automatically launch an automated browser session, navigate the interface, and verify core functionality according to the B2 Portfolio requirements.

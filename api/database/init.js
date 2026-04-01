@@ -49,33 +49,43 @@ const initDB = () => {
         `);
 
         // Seed Users
+        const breeds = ['Leghorn', 'Rhode Island Red', 'Sussex', 'Plymouth Rock', 'Australorp', 'Wyandotte', 'Orpington', 'Brahma', 'Silkie', 'Cochin'];
+        const feedTypes = ['Layer Pellets', 'Grower Mash', 'Chick Starter', 'Scratch Grains', 'Oyster Shells'];
+        const suppliers = ['Farm Supply Co.', 'AgriFeed Network', 'Local Grain Mill', 'Poultry Provisions Inc.'];
+        const staffNames = ['John Smith', 'Sarah Jenkins', 'Michael Davis', 'Emily Chen', 'David Wilson', 'Jessica Taylor', 'Robert Brown', 'Linda Garcia'];
+        
         const stmtChickens = db.prepare(`INSERT INTO chickens (breed, age, health_status, egg_production_rate, created_at) VALUES (?, ?, ?, ?, ?)`);
         for (let i = 1; i <= 20; i++) {
-            stmtChickens.run(`Breed_${i}`, Math.floor(Math.random() * 50) + 1, i % 3 === 0 ? 'Sick' : 'Healthy', Math.floor(Math.random() * 10) + 1, new Date().toISOString());
+            const breed = breeds[Math.floor(Math.random() * breeds.length)];
+            const status = Math.random() > 0.85 ? 'Sick' : 'Healthy';
+            stmtChickens.run(breed, Math.floor(Math.random() * 50) + 1, status, Math.floor(Math.random() * 10) + 1, new Date().toISOString());
         }
         stmtChickens.finalize();
 
         const stmtFeed = db.prepare(`INSERT INTO feed (type, quantity, supplier, last_restocked) VALUES (?, ?, ?, ?)`);
         for (let i = 1; i <= 20; i++) {
-            stmtFeed.run(`FeedType_${i}`, Math.floor(Math.random() * 1000) + 100, `Supplier_${i}`, new Date().toISOString());
+            const feedType = feedTypes[Math.floor(Math.random() * feedTypes.length)];
+            const supplier = suppliers[Math.floor(Math.random() * suppliers.length)];
+            stmtFeed.run(feedType, Math.floor(Math.random() * 1000) + 100, supplier, new Date().toISOString());
         }
         stmtFeed.finalize();
 
         const stmtEggs = db.prepare(`INSERT INTO eggs (quantity, collected_date, quality_grade) VALUES (?, ?, ?)`);
         for (let i = 1; i <= 20; i++) {
             const grades = ['A', 'AA', 'B'];
-            stmtEggs.run(Math.floor(Math.random() * 500) + 50, new Date().toISOString(), grades[i % 3]);
+            stmtEggs.run(Math.floor(Math.random() * 500) + 50, new Date().toISOString(), grades[Math.floor(Math.random() * grades.length)]);
         }
         stmtEggs.finalize();
 
         const stmtStaff = db.prepare(`INSERT INTO staff (name, role, contact) VALUES (?, ?, ?)`);
         for (let i = 1; i <= 20; i++) {
             const roles = ['Manager', 'Worker', 'Veterinarian', 'Security'];
-            stmtStaff.run(`Staff_Name_${i}`, roles[i % 4], `contact_${i}@farm.com`);
+            const staffName = staffNames[Math.floor(Math.random() * staffNames.length)] + ' ' + i;
+            stmtStaff.run(staffName, roles[Math.floor(Math.random() * roles.length)], `contact_${i}@farm.com`);
         }
         stmtStaff.finalize();
 
-        console.log("Database initialized and populated with 20 seeded records per table.");
+        console.log("Database initialized and populated with 20 seeded records per table using realistic data.");
     });
 };
 
