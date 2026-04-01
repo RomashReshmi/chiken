@@ -1,4 +1,10 @@
 import { useState, useEffect } from 'react';
+import { AlertTriangle } from 'lucide-react';
+import Sidebar from './components/Sidebar';
+import Dashboard from './components/Dashboard';
+import ChickensList from './components/ChickensList';
+import AddChickenForm from './components/AddChickenForm';
+import './App.css'; 
 
 const API_URL = 'http://localhost:3000';
 
@@ -40,218 +46,58 @@ function App() {
     }
   };
 
-  return (
-    <div className="app-container">
-      <aside className="sidebar">
-        <h2>PoultryFarm</h2>
-        <nav>
-          <button 
-            className={`nav-link ${activeTab === 'dashboard' ? 'active' : ''}`}
-            onClick={() => setActiveTab('dashboard')}
-          >
-            Dashboard Overview
-          </button>
-          <button 
-            className={`nav-link ${activeTab === 'list' ? 'active' : ''}`}
-            onClick={() => setActiveTab('list')}
-          >
-            Chickens Inventory
-          </button>
-          <button 
-            className={`nav-link ${activeTab === 'add' ? 'active' : ''}`}
-            onClick={() => setActiveTab('add')}
-          >
-            Add New Record
-          </button>
-        </nav>
-      </aside>
-
-      <main className="main-content">
-        <header className="header">
-          <h1>
-            {activeTab === 'dashboard' && 'Farm Dashboard'}
-            {activeTab === 'list' && 'Chickens Inventory'}
-            {activeTab === 'add' && 'Add New Chicken'}
-          </h1>
-        </header>
-
-        {error && (
-          <div style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
-            Warning: {error}
-          </div>
-        )}
-
-        {activeTab === 'dashboard' && (
-          <Dashboard loading={loading} chickens={chickens} />
-        )}
-
-        {activeTab === 'list' && (
-          <ChickensList loading={loading} chickens={chickens} onDelete={handleDelete} />
-        )}
-
-        {activeTab === 'add' && (
-          <AddChickenForm onSuccess={() => setActiveTab('list')} />
-        )}
-      </main>
-    </div>
-  );
-}
-
-function Dashboard({ loading, chickens }) {
-  if (loading) return <p>Loading stats...</p>;
-
-  const total = chickens.length;
-  const healthy = chickens.filter(c => c.health_status === 'Healthy').length;
-  const totalEggs = chickens.reduce((sum, c) => sum + (c.egg_production_rate || 0), 0);
-
-  return (
-    <div className="dashboard-grid">
-      <div className="stat-card">
-        <h3 className="stat-title">Total Chickens</h3>
-        <p className="stat-value">{total}</p>
-      </div>
-      <div className="stat-card">
-        <h3 className="stat-title">Healthy Population</h3>
-        <p className="stat-value" style={{ color: 'var(--success)' }}>{healthy}</p>
-      </div>
-      <div className="stat-card">
-        <h3 className="stat-title">Weekly Egg Prod.</h3>
-        <p className="stat-value" style={{ color: 'var(--accent-color)' }}>{totalEggs}</p>
-      </div>
-    </div>
-  );
-}
-
-function ChickensList({ loading, chickens, onDelete }) {
-  if (loading) return <p>Loading data...</p>;
-  if (chickens.length === 0) return <p>No chickens found. The inventory is empty.</p>;
-
-  return (
-    <div className="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Breed</th>
-            <th>Age (wks)</th>
-            <th>Health Status</th>
-            <th>Egg Prod. (wks)</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {chickens.map(c => (
-            <tr key={c.id}>
-              <td>{c.id}</td>
-              <td>{c.breed}</td>
-              <td>{c.age}</td>
-              <td>
-                <span className={`status-tag ${c.health_status.toLowerCase()}`}>
-                  {c.health_status}
-                </span>
-              </td>
-              <td>{c.egg_production_rate}</td>
-              <td>
-                <button className="btn btn-danger" onClick={() => onDelete(c.id)}>
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-function AddChickenForm({ onSuccess }) {
-  const [formData, setFormData] = useState({
-    breed: '',
-    age: '',
-    health_status: 'Healthy',
-    egg_production_rate: ''
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch(`${API_URL}/chickens`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          age: parseInt(formData.age, 10),
-          egg_production_rate: parseInt(formData.egg_production_rate, 10)
-        })
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.errors ? data.errors.map(e => e.msg).join(', ') : data.error);
-      }
-      onSuccess();
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+  const pageHeaders = {
+    dashboard: { title: 'Farm Overview', subtitle: 'Detailed statistics and insights on your poultry farm.' },
+    list: { title: 'Poultry Inventory', subtitle: 'Manage active flocks, sort by health status, and track production.' },
+    add: { title: 'Onboard Chicken', subtitle: 'Create a new record in the farm database.' }
   };
 
   return (
-    <div className="form-container">
-      {error && <div style={{ color: 'var(--danger)', marginBottom: '1rem' }}>{error}</div>}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Breed</label>
-          <input 
-            type="text" 
-            className="form-control" 
-            required
-            value={formData.breed}
-            onChange={(e) => setFormData({...formData, breed: e.target.value})}
-          />
+    <div className="app-layout">
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+
+      <main className="main-content">
+        <header className="page-header stagger-1">
+          <div>
+            <h1 className="page-title">{pageHeaders[activeTab].title}</h1>
+            <p className="page-subtitle">{pageHeaders[activeTab].subtitle}</p>
+          </div>
+        </header>
+
+        {error && (
+          <div style={{ 
+            background: 'var(--danger-bg)', 
+            color: 'var(--danger)', 
+            padding: '1rem', 
+            borderRadius: 'var(--radius-md)', 
+            marginBottom: '1.5rem',
+            border: '1px solid rgba(239, 68, 68, 0.2)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem'
+          }} className="animate-fade-in stagger-2">
+            <AlertTriangle size={20} />
+            <div>
+              <strong>Connection Error</strong>
+              <p style={{ margin: 0, fontSize: '0.9rem', opacity: 0.9 }}>{error}</p>
+            </div>
+          </div>
+        )}
+
+        <div className="page-content stagger-2">
+          {activeTab === 'dashboard' && (
+            <Dashboard loading={loading} chickens={chickens} />
+          )}
+
+          {activeTab === 'list' && (
+            <ChickensList loading={loading} chickens={chickens} onDelete={handleDelete} />
+          )}
+
+          {activeTab === 'add' && (
+            <AddChickenForm API_URL={API_URL} onSuccess={() => setActiveTab('list')} />
+          )}
         </div>
-        <div className="form-group">
-          <label>Age (weeks)</label>
-          <input 
-            type="number" 
-            className="form-control" 
-            required min="0"
-            value={formData.age}
-            onChange={(e) => setFormData({...formData, age: e.target.value})}
-          />
-        </div>
-        <div className="form-group">
-          <label>Health Status</label>
-          <select 
-            className="form-control" 
-            value={formData.health_status}
-            onChange={(e) => setFormData({...formData, health_status: e.target.value})}
-          >
-            <option value="Healthy">Healthy</option>
-            <option value="Sick">Sick</option>
-            <option value="Injured">Injured</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label>Egg Production Rate (per week)</label>
-          <input 
-            type="number" 
-            className="form-control" 
-            required min="0"
-            value={formData.egg_production_rate}
-            onChange={(e) => setFormData({...formData, egg_production_rate: e.target.value})}
-          />
-        </div>
-        <button type="submit" className="btn btn-primary" disabled={loading}>
-          {loading ? 'Saving...' : 'Save Chicken Record'}
-        </button>
-      </form>
+      </main>
     </div>
   );
 }
