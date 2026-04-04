@@ -32,3 +32,22 @@ test('Can view Chickens List', async t => {
   const table = Selector('table');
   await t.expect(table.exists).ok();
 });
+
+test('Fill in Add Chicken form and verify table update', async t => {
+    await t
+        .typeText('input[name="breed"]', 'Silkie')
+        .typeText('input[name="age"]', '2')
+        .typeText('input[name="health_status"]', 'Healthy')
+        .typeText('input[name="egg_production_rate"]', '0.5')
+        .click('button[type="submit"]')
+        .expect(Selector('table').innerText).contains('Silkie'); 
+});
+
+test('Navigate to Chickens Inventory and verify data exists', async t => {
+    const tableRowExists = Selector('table tbody tr').exists;
+    const rowCount = Selector('table tbody tr').count;
+    
+    await t
+        .expect(tableRowExists).ok('Table or rows do not exist holding inventory')
+        .expect(rowCount).gte(1, 'Expected at least one row of data in the inventory table');
+});

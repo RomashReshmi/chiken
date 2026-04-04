@@ -62,6 +62,41 @@ describe('Chicken API', () => {
         expect(res.body.error).toEqual('Endpoint Not Found');
     });
 
+    it('should return 400 when missing breed field on POST', async () => {
+        const newChicken = {
+            age: 2,
+            health_status: 'Healthy',
+            egg_production_rate: 0.8
+        };
+        const response = await request(app)
+            .post('/chickens')
+            .send(newChicken);
+        expect(response.statusCode).toBe(400);
+    });
+
+    it('should return 400 when age is invalid on POST', async () => {
+        const newChicken = {
+            breed: 'Leghorn',
+            age: 'abc', // Invalid age
+            health_status: 'Healthy',
+            egg_production_rate: 0.8
+        };
+        const response = await request(app)
+            .post('/chickens')
+            .send(newChicken);
+        expect(response.statusCode).toBe(400);
+    });
+
+    it('should return 404 when getting a non-existent chicken', async () => {
+        const response = await request(app).get('/chickens/99999');
+        expect(response.statusCode).toBe(404);
+    });
+
+    it('should return 404 when deleting a non-existent chicken', async () => {
+        const response = await request(app).delete('/chickens/99999');
+        expect(response.statusCode).toBe(404);
+    });
+
     afterAll((done) => {
         db.close(done);
     });
