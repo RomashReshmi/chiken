@@ -55,11 +55,11 @@ poultry-farm-system/
    ```
 2. Initialize the database and seed the mock data:
    ```bash
-   npm run db:init
+   node database/init.js
    ```
 3. Start backend development server:
    ```bash
-   npm run dev
+   npm start
    ```
    > The API will be available at `http://localhost:5000`
 
